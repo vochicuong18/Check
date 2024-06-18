@@ -19,6 +19,8 @@ public class ContactDetailsLocator extends AppiumFactory {
     protected WebElement weConfirmDelete;
     @FindBy(how = How.ID, using = "com.google.android.contacts:id/menu_insert_or_edit")
     protected WebElement weEditContact;
+    @FindBy(how = How.XPATH, using = "//android.widget.ImageButton[@content-desc=\"Navigate up\"]")
+    protected WebElement weBack;
 
     public ContactDetailsLocator(AppiumDriver driver) {
         super(driver);

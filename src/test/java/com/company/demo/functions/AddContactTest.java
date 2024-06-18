@@ -33,5 +33,6 @@ public class AddContactTest extends BaseTest {
         contactDetailsPage = createContactPage.saveContact();
         AssertUtility.assertTrue(contactDetailsPage.checkContactName(name), "Check contact name");
         AssertUtility.assertTrue(contactDetailsPage.checkContactPhoneNumber(phoneNumber), "Check contact phone number");
+        contactDetailsPage.backToContactList();
     }
 }

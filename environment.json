@@ -1,0 +1,15 @@
+{
+  "platform": "android",
+  "android": {
+    "deviceName": "emulator-5554",
+    "platformName": "Android",
+    "appPackage": "com.google.android.contacts",
+    "appActivity": "com.android.contacts.activities.PeopleActivity"
+  },
+  "ios": {
+    "deviceName": "",
+    "platformName": "iOS",
+    "appPackage": "",
+    "appActivity": ""
+  }
+}

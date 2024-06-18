@@ -36,4 +36,10 @@ public class ContactDetailsPage extends ContactDetailsLocator {
         weEditContact.click();
         return new CreateContactPage(driver);
     }
+
+    public ContactListPage backToContactList(){
+        getWaitUtility().waitUntilToBeClickAble(weBack);
+        weBack.click();
+        return new ContactListPage(driver);
+    }
 }

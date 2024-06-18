@@ -8,6 +8,7 @@ import com.company.demo.ultis.DataTest;
 import com.company.demo.ultis.ReportUtility;
 import io.appium.java_client.AppiumDriver;
 import org.apache.commons.io.FileUtils;
+import org.json.JSONObject;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.testng.ITestContext;
@@ -15,6 +16,7 @@ import org.testng.ITestResult;
 import org.testng.annotations.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -94,8 +96,28 @@ public class BaseTest {
     }
 
     private void initMobile() {
-        driver.set(DriverFactory.getDriver("Android", "e8a82aab", "com.google.android.contacts", "com.android.contacts.activities.PeopleActivity"));
-        contactListPage.put(getDriver(), new ContactListPage(getDriver()));
+        try {
+            File file = new File(System.getProperty("user.dir") + File.separator + "environment.json");
+            String content = FileUtils.readFileToString(file, "utf-8");
+            JSONObject env = new JSONObject(content);
+            String platformName = env.get("platform").toString();
+            if (platformName.equals("android")) {
+                JSONObject androidConfig = env.getJSONObject("android");
+                driver.set(DriverFactory.getDriver(androidConfig.getString("platformName"),
+                        androidConfig.getString("deviceName"),
+                        androidConfig.getString("appPackage"),
+                        androidConfig.getString("appActivity")));
+            } else {
+                JSONObject iosConfig = env.getJSONObject("ios");
+                driver.set(DriverFactory.getDriver(iosConfig.getString("platformName"),
+                        iosConfig.getString("deviceName"),
+                        iosConfig.getString("appPackage"),
+                        iosConfig.getString("appActivity")));
+            }
+            contactListPage.put(getDriver(), new ContactListPage(getDriver()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected void preCondition() {

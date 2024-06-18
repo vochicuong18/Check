@@ -10,6 +10,7 @@ import java.util.List;
 
 public class ContactListLocator extends AppiumFactory {
     public static final String CONTACT_NAME = "xpath=//android.widget.TextView[@content-desc=\"%s\"]";
+    public static final String SKIP_SYNC = "id=android:id/button2";
 
     @FindBy(how = How.ID, using = "com.google.android.contacts:id/floating_action_button")
     protected WebElement weAddContact;

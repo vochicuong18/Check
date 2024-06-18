@@ -39,5 +39,6 @@ public class UpdateContact extends BaseTest {
         createContactPage.fillName(user.getName());
         createContactPage.fillPhoneNumber(user.getPhoneNumber());
         contactDetailsPage = createContactPage.saveContact();
+        contactDetailsPage.backToContactList();
     }
 }

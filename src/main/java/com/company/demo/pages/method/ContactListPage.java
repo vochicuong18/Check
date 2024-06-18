@@ -15,8 +15,9 @@ public class ContactListPage extends ContactListLocator {
     }
 
     public void skipSync(){
-        if (weSkipSync.isDisplayed()){
-            weSkipSync.click();
+        Label label = new Label(driver,SKIP_SYNC);
+        if (label.isDisplay()){
+            label.click();
         }
     }
 
