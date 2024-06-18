@@ -2,13 +2,14 @@ package com.company.demo.base;
 
 import com.aventstack.extentreports.Status;
 import com.company.demo.drivers.DriverFactory;
+import com.company.demo.pages.method.ContactListPage;
 import com.company.demo.pages.method.HomePage;
+import com.company.demo.ultis.DataTest;
 import com.company.demo.ultis.ReportUtility;
 import io.appium.java_client.AppiumDriver;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -21,18 +22,18 @@ import java.util.Map;
 import static com.google.common.base.StandardSystemProperty.USER_DIR;
 
 public class BaseTest {
-    private static Map<AppiumDriver, HomePage> homePage = new HashMap<>();
-    private static Map<AppiumDriver, String> className = new HashMap<>();
-    private static Map<AppiumDriver, Integer> localCount = new HashMap<>();
-    private static Map<AppiumDriver, Boolean> statusResult = new HashMap<>();
+    private static final Map<AppiumDriver, ContactListPage> contactListPage = new HashMap<>();
+    private static final Map<AppiumDriver, String> className = new HashMap<>();
+    private static final Map<AppiumDriver, Integer> localCount = new HashMap<>();
+    private static final Map<AppiumDriver, Boolean> statusResult = new HashMap<>();
     public static ThreadLocal<AppiumDriver> driver = new ThreadLocal<>();
 
     public synchronized static AppiumDriver getDriver() {
         return driver.get();
     }
 
-    public synchronized static HomePage getHomePage() {
-        return homePage.get(getDriver());
+    public synchronized static ContactListPage getContactListPage() {
+        return contactListPage.get(getDriver());
     }
 
     @BeforeSuite
@@ -43,6 +44,7 @@ public class BaseTest {
     @BeforeTest
     public void setUp() {
         initMobile();
+        DataTest.init();
     }
 
     @BeforeClass
@@ -51,6 +53,7 @@ public class BaseTest {
         className.put(getDriver(), getClass().getSimpleName());
         localCount.put(getDriver(), 0);
         ReportUtility.getInstance().startTest(className.get(getDriver()));
+        getContactListPage().skipSync();
     }
 
     @BeforeMethod
@@ -68,7 +71,7 @@ public class BaseTest {
                     if (!ignoreTrackTrace(trace.toString()))
                         ReportUtility.getInstance().log(Status.FAIL, trace.toString());
                 }
-                getscreenshot();
+                getScreenShot();
                 ReportUtility.getInstance().addScreenCapture(Status.FAIL, "log" + "Test" + ".png");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -91,8 +94,8 @@ public class BaseTest {
     }
 
     private void initMobile() {
-        driver.set(DriverFactory.getDriver("Android", "e8a82aab"));
-        homePage.put(getDriver(), new HomePage(getDriver()));
+        driver.set(DriverFactory.getDriver("Android", "e8a82aab", "com.google.android.contacts", "com.android.contacts.activities.PeopleActivity"));
+        contactListPage.put(getDriver(), new ContactListPage(getDriver()));
     }
 
     protected void preCondition() {
@@ -110,11 +113,11 @@ public class BaseTest {
         } else return log.contains("org.apache.maven.surefire");
     }
 
-    private void getscreenshot() throws Exception {
+    private void getScreenShot() throws Exception {
         File scrFile = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);
         localCount.put(getDriver(), localCount.get(getDriver()) + 1);
-        String screenshotPath = USER_DIR + File.separator + "test-output" + File.separator + "report"
-                + File.separator + "log" + File.separator + "test"+".png";
+        String screenshotPath = "test-output" + File.separator + "report"
+                + File.separator + "image" + File.separator + className.get(getDriver()) +".png";
         FileUtils.copyFile(scrFile, new File(screenshotPath));
     }
 }

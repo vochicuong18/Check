@@ -10,10 +10,12 @@ import java.net.URL;
 
 public class DriverFactory {
 
-    public static AppiumDriver getDriver(String platformName, String deviceName) {
+    public static AppiumDriver getDriver(String platformName, String deviceName, String appPackage, String appActivity) {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("platformName", platformName);
         capabilities.setCapability("appium:deviceName", deviceName);
+        capabilities.setCapability("appium:appPackage", appPackage);
+        capabilities.setCapability("appium:appActivity", appActivity);
         URL appiumUrl = null;
         try {
             appiumUrl = new URL("http://127.0.0.1:4723/wd/hub");

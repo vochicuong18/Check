@@ -10,16 +10,29 @@ public class CreateContactPage extends CreateContactLocator {
 
     public void fillName(String name){
         getWaitUtility().waitUntilToBeClickAble(weName);
+        weName.clear();
         weName.sendKeys(name);
     }
 
     public void fillPhoneNumber(String phoneNumber){
         getWaitUtility().waitUntilToBeClickAble(wePhoneNumber);
+        wePhoneNumber.clear();
         wePhoneNumber.sendKeys(phoneNumber);
     }
 
-    public void saveContact(){
+    public ContactDetailsPage saveContact(){
         getWaitUtility().waitUntilToBeClickAble(weSave);
         weSave.click();
+        return new ContactDetailsPage(driver);
+    }
+
+    public boolean isWarningPopupDisplayed(){
+        getWaitUtility().waitUntilToBeClickAble(weWarningPopup);
+        return weWarningPopup.isDisplayed();
+    }
+
+    public void closeWarningPopup(){
+        getWaitUtility().waitUntilToBeClickAble(weCloseWarningPopup);
+        weCloseWarningPopup.click();
     }
 }

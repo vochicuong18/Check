@@ -1,29 +1,37 @@
 package com.company.demo.functions;
 
 import com.company.demo.base.BaseTest;
-import com.company.demo.pages.method.ContactListPage;
+import com.company.demo.pages.method.ContactDetailsPage;
 import com.company.demo.pages.method.CreateContactPage;
-import com.company.demo.pages.method.MenuPage;
+import com.company.demo.ultis.AssertUtility;
+import com.company.demo.ultis.StringUtility;
 import org.testng.annotations.Test;
 
 public class AddContactTest extends BaseTest {
-    private MenuPage menuPage;
-    private ContactListPage contactListPage;
     private CreateContactPage createContactPage;
-    String name;
+    private ContactDetailsPage contactDetailsPage;
+    String name, phoneNumber;
 
     @Override
     public void preCondition() {
-        name = System.currentTimeMillis() + "Name";
+        name = StringUtility.getRandomName();
+        phoneNumber = StringUtility.getRandomNumber(10);
     }
 
     @Test
-    public void addContact(){
-        menuPage = getHomePage().goToMenuPage();
-        contactListPage = menuPage.goToContactApp();
-        createContactPage = contactListPage.addContact();
-        createContactPage.fillName(name);
-        createContactPage.fillPhoneNumber("0123456789");
+    public void addEmptyContact(){
+        createContactPage = getContactListPage().addContact();
         createContactPage.saveContact();
+        AssertUtility.assertTrue(createContactPage.isWarningPopupDisplayed(), "Error popup is displayed");
+        createContactPage.closeWarningPopup();
+    }
+
+    @Test(dependsOnMethods = "addEmptyContact")
+    public void addContact(){
+        createContactPage.fillName(name);
+        createContactPage.fillPhoneNumber(phoneNumber);
+        contactDetailsPage = createContactPage.saveContact();
+        AssertUtility.assertTrue(contactDetailsPage.checkContactName(name), "Check contact name");
+        AssertUtility.assertTrue(contactDetailsPage.checkContactPhoneNumber(phoneNumber), "Check contact phone number");
     }
 }
