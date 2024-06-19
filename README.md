@@ -1,8 +1,8 @@
-# Appium Contact Demo
+# Appium Contact Demo 📱
 
-This repository is a demo project demonstrating how to use Appium to automate testing of a contact app on Android and iOS.
+This repository is a demo project demonstrating how to use Appium to automate testing of a contact app on **Android** and **iOS**.
 
- *Note: This is a basic demo project and can be extended with more features and test cases. Currently, it is applied for Android.*
+**Note:** This is a basic demo project and can be extended with more features and test cases.
 
 ## Features:
 - **Cross-Platform Testing:** This demo showcases testing the same functionality across both Android and iOS.
@@ -15,9 +15,13 @@ This repository is a demo project demonstrating how to use Appium to automate te
 - Java Development Kit (JDK)
 - Apache Maven
 - Appium Server
-- Android Emulator or Real Device
-- iOS Simulator or Real Device
-- Xcode (for iOS)
+-  **Android:**
+   - Android Emulator or Real Device
+- **iOS:**
+    - Xcode
+    - iOS Simulator or Real Device
+    - Xcode Command Line Tools
+    - WebDriverAgent (WDA)
 
 ## Getting Started
 1. **Clone the repository:** 
