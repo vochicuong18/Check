@@ -3,7 +3,8 @@ package com.company.demo.base;
 import com.aventstack.extentreports.Status;
 import com.company.demo.drivers.AndroidDriverManager;
 import com.company.demo.drivers.IOSDriverManager;
-import com.company.demo.pages.method.ContactListPage;
+import com.company.demo.pages.method.android.ContactListScreen;
+import com.company.demo.pages.method.ios.IOSContactListScreen;
 import com.company.demo.ultis.DataTest;
 import com.company.demo.ultis.ReportUtility;
 import io.appium.java_client.AppiumDriver;
@@ -21,7 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BaseTest {
-    private static final Map<AppiumDriver, ContactListPage> contactListPage = new HashMap<>();
+    private static final Map<AppiumDriver, ContactListScreen> contactListScreen = new HashMap<>();
+    private static final Map<AppiumDriver, IOSContactListScreen> iOSContactListScreen = new HashMap<>();
     private static final Map<AppiumDriver, String> className = new HashMap<>();
     public static ThreadLocal<AppiumDriver> driver = new ThreadLocal<>();
     private static final Map<AppiumDriver, Boolean> statusResult = new HashMap<>();
@@ -31,8 +33,12 @@ public class BaseTest {
         return driver.get();
     }
 
-    public synchronized static ContactListPage getContactListPage() {
-        return contactListPage.get(getDriver());
+    public synchronized static ContactListScreen getContactListScreen() {
+        return contactListScreen.get(getDriver());
+    }
+
+    public synchronized static IOSContactListScreen getIOSContactListPage() {
+        return iOSContactListScreen.get(getDriver());
     }
 
     @BeforeSuite
@@ -52,7 +58,7 @@ public class BaseTest {
         preCondition();
         className.put(getDriver(), getClass().getSimpleName());
         ReportUtility.getInstance().startTest(className.get(getDriver()));
-        getContactListPage().skipSync();
+        getContactListScreen().skipSync();
     }
 
     @BeforeMethod
@@ -88,17 +94,26 @@ public class BaseTest {
     @AfterTest
     public void tearDown() {
         if (getDriver() != null) {
-            getDriver().quit();
+            try {
+                getDriver().quit();
+            } catch (Exception e) {
+                // In thông báo lỗi
+                System.err.println("Error while quitting driver: " + e.getMessage());
+                // Thực hiện các hành động xử lý lỗi khác (nếu cần)
+            }
         }
     }
 
     private void initMobile(String platform) {
         if (platform.equalsIgnoreCase("android")) {
             driver.set(AndroidDriverManager.getDriver(capabilities));
+            contactListScreen.put(getDriver(), new ContactListScreen(getDriver()));
+
         } else if (platform.equalsIgnoreCase("ios")) {
             driver.set(IOSDriverManager.getDriver(capabilities));
+            iOSContactListScreen.put(getDriver(), new IOSContactListScreen(getDriver()));
+
         }
-        contactListPage.put(getDriver(), new ContactListPage(getDriver()));
     }
 
     protected void preCondition() {

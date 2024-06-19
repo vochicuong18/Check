@@ -7,9 +7,11 @@
     "appActivity": "com.android.contacts.activities.PeopleActivity"
   },
   "ios": {
-    "deviceName": "",
+    "deviceName": "iPhone 15 Pro Max",
     "platformName": "iOS",
-    "appPackage": "",
-    "appActivity": ""
+    "udid": "D6BD76C1-9FE2-4A45-8977-B5D52957BDBC",
+    "bundleID": "com.apple.MobileAddressBook",
+    "automationName": "XCUITest",
+    "platformVersion": "17.5"
   }
 }

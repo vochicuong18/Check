@@ -4,9 +4,9 @@
     <parameter name="platformName" value="android" />
     <test name="Android Tests">
         <classes>
-            <class name="com.company.demo.functions.AddContactTest" />
-            <class name="com.company.demo.functions.UpdateContact" />
-            <class name="com.company.demo.functions.DeleteContactTest" />
+            <class name="com.company.demo.functions.android.AddContactTest" />
+            <class name="com.company.demo.functions.android.UpdateContact" />
+            <class name="com.company.demo.functions.android.DeleteContactTest" />
         </classes>
     </test>
 </suite>

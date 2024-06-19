@@ -1,4 +1,4 @@
-package com.company.demo.pages.locator;
+package com.company.demo.pages.locator.android;
 
 import com.company.demo.drivers.AppiumFactory;
 import io.appium.java_client.AppiumDriver;

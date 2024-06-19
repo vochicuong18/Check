@@ -1,10 +1,10 @@
-package com.company.demo.pages.method;
+package com.company.demo.pages.method.android;
 
-import com.company.demo.pages.locator.CreateContactLocator;
+import com.company.demo.pages.locator.android.CreateContactLocator;
 import io.appium.java_client.AppiumDriver;
 
-public class CreateContactPage extends CreateContactLocator {
-    public CreateContactPage(AppiumDriver driver) {
+public class CreateContactScreen extends CreateContactLocator {
+    public CreateContactScreen(AppiumDriver driver) {
         super(driver);
     }
 
@@ -20,10 +20,10 @@ public class CreateContactPage extends CreateContactLocator {
         wePhoneNumber.sendKeys(phoneNumber);
     }
 
-    public ContactDetailsPage saveContact(){
+    public ContactDetailsScreen saveContact(){
         getWaitUtility().waitUntilToBeClickAble(weSave);
         weSave.click();
-        return new ContactDetailsPage(driver);
+        return new ContactDetailsScreen(driver);
     }
 
     public boolean isWarningPopupDisplayed(){

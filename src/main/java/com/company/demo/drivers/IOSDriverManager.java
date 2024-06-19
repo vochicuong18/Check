@@ -2,6 +2,7 @@ package com.company.demo.drivers;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -20,9 +21,11 @@ public class IOSDriverManager {
             JSONObject iosConfig = env.getJSONObject("ios");
             capabilities.setCapability("platformName", iosConfig.get("platformName"));
             capabilities.setCapability("appium:deviceName", iosConfig.get("deviceName"));
-            capabilities.setCapability("appium:appPackage", iosConfig.get("appPackage"));
-            capabilities.setCapability("appium:appActivity", iosConfig.get("appActivity"));
-            return new AndroidDriver(appiumUrl, capabilities);
+            capabilities.setCapability("appium:bundleId", iosConfig.get("bundleID"));
+            capabilities.setCapability("appium:udid", iosConfig.get("udid"));
+            capabilities.setCapability("appium:automationName", iosConfig.get("automationName"));
+            capabilities.setCapability("appium:platformVersion", iosConfig.get("platformVersion"));
+            return new IOSDriver(appiumUrl, capabilities);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -1,16 +1,16 @@
-package com.company.demo.pages.method;
+package com.company.demo.pages.method.android;
 
 import com.company.demo.components.Label;
-import com.company.demo.pages.locator.ContactListLocator;
+import com.company.demo.pages.locator.android.ContactListLocator;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ContactListPage extends ContactListLocator {
+public class ContactListScreen extends ContactListLocator {
 
-    public ContactListPage(AppiumDriver driver) {
+    public ContactListScreen(AppiumDriver driver) {
         super(driver);
     }
 
@@ -21,17 +21,17 @@ public class ContactListPage extends ContactListLocator {
         }
     }
 
-    public CreateContactPage addContact(){
+    public CreateContactScreen addContact(){
         getWaitUtility().waitUntilToBeClickAble(weAddContact);
         weAddContact.click();
-        return new CreateContactPage(driver);
+        return new CreateContactScreen(driver);
     }
 
-    public ContactDetailsPage goToContactDetails(String contactName){
+    public ContactDetailsScreen goToContactDetails(String contactName){
         Label label = new Label(driver,String.format(CONTACT_NAME, contactName));
         label.waitUntilToBeClickAble();
         label.click();
-        return new ContactDetailsPage(driver);
+        return new ContactDetailsScreen(driver);
     }
 
     public List<String> getContactList() {

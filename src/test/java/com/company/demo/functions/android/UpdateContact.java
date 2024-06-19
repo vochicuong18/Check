@@ -1,9 +1,9 @@
-package com.company.demo.functions;
+package com.company.demo.functions.android;
 
 import com.company.demo.base.BaseTest;
 import com.company.demo.entity.User;
-import com.company.demo.pages.method.ContactDetailsPage;
-import com.company.demo.pages.method.CreateContactPage;
+import com.company.demo.pages.method.android.ContactDetailsScreen;
+import com.company.demo.pages.method.android.CreateContactScreen;
 import com.company.demo.ultis.AssertUtility;
 import com.company.demo.ultis.DataTest;
 import com.company.demo.ultis.StringUtility;
@@ -11,8 +11,8 @@ import org.testng.annotations.Test;
 
 public class UpdateContact extends BaseTest {
     private User user;
-    private ContactDetailsPage contactDetailsPage;
-    private CreateContactPage createContactPage;
+    private ContactDetailsScreen contactDetailsScreen;
+    private CreateContactScreen createContactPage;
     private String newName, newPhoneNumber;
 
     @Override
@@ -24,21 +24,21 @@ public class UpdateContact extends BaseTest {
 
     @Test
     public void updateContact() {
-        contactDetailsPage = getContactListPage().goToContactDetails(user.getName());
-        createContactPage = contactDetailsPage.editContact();
+        contactDetailsScreen = getContactListScreen().goToContactDetails(user.getName());
+        createContactPage = contactDetailsScreen.editContact();
         createContactPage.fillName(newName);
         createContactPage.fillPhoneNumber(newPhoneNumber);
-        contactDetailsPage = createContactPage.saveContact();
-        AssertUtility.assertTrue(contactDetailsPage.checkContactName(newName), "Name is updated");
-        AssertUtility.assertTrue(contactDetailsPage.checkContactPhoneNumber(newPhoneNumber), "Phone number is updated");
+        contactDetailsScreen = createContactPage.saveContact();
+        AssertUtility.assertTrue(contactDetailsScreen.checkContactName(newName), "Name is updated");
+        AssertUtility.assertTrue(contactDetailsScreen.checkContactPhoneNumber(newPhoneNumber), "Phone number is updated");
     }
 
     @Test(dependsOnMethods = "updateContact")
     public void revertUpdate(){
-        createContactPage = contactDetailsPage.editContact();
+        createContactPage = contactDetailsScreen.editContact();
         createContactPage.fillName(user.getName());
         createContactPage.fillPhoneNumber(user.getPhoneNumber());
-        contactDetailsPage = createContactPage.saveContact();
-        contactDetailsPage.backToContactList();
+        contactDetailsScreen = createContactPage.saveContact();
+        contactDetailsScreen.backToContactList();
     }
 }
