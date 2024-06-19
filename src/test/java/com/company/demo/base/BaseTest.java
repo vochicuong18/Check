@@ -1,34 +1,31 @@
 package com.company.demo.base;
 
 import com.aventstack.extentreports.Status;
-import com.company.demo.drivers.DriverFactory;
+import com.company.demo.drivers.AndroidDriverManager;
+import com.company.demo.drivers.IOSDriverManager;
 import com.company.demo.pages.method.ContactListPage;
-import com.company.demo.pages.method.HomePage;
 import com.company.demo.ultis.DataTest;
 import com.company.demo.ultis.ReportUtility;
 import io.appium.java_client.AppiumDriver;
 import org.apache.commons.io.FileUtils;
-import org.json.JSONObject;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.google.common.base.StandardSystemProperty.USER_DIR;
-
 public class BaseTest {
     private static final Map<AppiumDriver, ContactListPage> contactListPage = new HashMap<>();
     private static final Map<AppiumDriver, String> className = new HashMap<>();
-    private static final Map<AppiumDriver, Integer> localCount = new HashMap<>();
-    private static final Map<AppiumDriver, Boolean> statusResult = new HashMap<>();
     public static ThreadLocal<AppiumDriver> driver = new ThreadLocal<>();
+    private static final Map<AppiumDriver, Boolean> statusResult = new HashMap<>();
+    public DesiredCapabilities capabilities = new DesiredCapabilities();
 
     public synchronized static AppiumDriver getDriver() {
         return driver.get();
@@ -44,8 +41,9 @@ public class BaseTest {
     }
 
     @BeforeTest
-    public void setUp() {
-        initMobile();
+    @Parameters("platformName")
+    public void setUp(@Optional("android") String platform) {
+        initMobile(platform);
         DataTest.init();
     }
 
@@ -53,7 +51,6 @@ public class BaseTest {
     public void beforeClass() {
         preCondition();
         className.put(getDriver(), getClass().getSimpleName());
-        localCount.put(getDriver(), 0);
         ReportUtility.getInstance().startTest(className.get(getDriver()));
         getContactListPage().skipSync();
     }
@@ -95,29 +92,13 @@ public class BaseTest {
         }
     }
 
-    private void initMobile() {
-        try {
-            File file = new File(System.getProperty("user.dir") + File.separator + "environment.json");
-            String content = FileUtils.readFileToString(file, "utf-8");
-            JSONObject env = new JSONObject(content);
-            String platformName = env.get("platform").toString();
-            if (platformName.equals("android")) {
-                JSONObject androidConfig = env.getJSONObject("android");
-                driver.set(DriverFactory.getDriver(androidConfig.getString("platformName"),
-                        androidConfig.getString("deviceName"),
-                        androidConfig.getString("appPackage"),
-                        androidConfig.getString("appActivity")));
-            } else {
-                JSONObject iosConfig = env.getJSONObject("ios");
-                driver.set(DriverFactory.getDriver(iosConfig.getString("platformName"),
-                        iosConfig.getString("deviceName"),
-                        iosConfig.getString("appPackage"),
-                        iosConfig.getString("appActivity")));
-            }
-            contactListPage.put(getDriver(), new ContactListPage(getDriver()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    private void initMobile(String platform) {
+        if (platform.equalsIgnoreCase("android")) {
+            driver.set(AndroidDriverManager.getDriver(capabilities));
+        } else if (platform.equalsIgnoreCase("ios")) {
+            driver.set(IOSDriverManager.getDriver(capabilities));
         }
+        contactListPage.put(getDriver(), new ContactListPage(getDriver()));
     }
 
     protected void preCondition() {
@@ -137,9 +118,8 @@ public class BaseTest {
 
     private void getScreenShot() throws Exception {
         File scrFile = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);
-        localCount.put(getDriver(), localCount.get(getDriver()) + 1);
         String screenshotPath = "test-output" + File.separator + "report"
-                + File.separator + "image" + File.separator + className.get(getDriver()) +".png";
+                + File.separator + "image" + File.separator + className.get(getDriver()) + ".png";
         FileUtils.copyFile(scrFile, new File(screenshotPath));
     }
 }
