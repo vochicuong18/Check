@@ -23,7 +23,7 @@ public class DataTest {
 
     public static User getUserTest(){
         JSONObject jsonData = users.getJSONObject("user");
-        return new User.Builder()
+        return User.builder()
                 .name(jsonData.getString("name"))
                 .phoneNumber(jsonData.getString("phoneNumber"))
                 .build();

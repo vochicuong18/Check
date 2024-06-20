@@ -49,13 +49,14 @@ public class BaseTest {
     @BeforeTest
     @Parameters("platformName")
     public void setUp(@Optional("android") String platform) {
-        initMobile(platform);
         DataTest.init();
+        preCondition();
+        initMobile(platform);
     }
 
     @BeforeClass
     public void beforeClass() {
-        preCondition();
+//        preCondition();
         className.put(getDriver(), getClass().getSimpleName());
         ReportUtility.getInstance().startTest(className.get(getDriver()));
         getContactListScreen().skipSync();
